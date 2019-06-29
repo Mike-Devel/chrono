@@ -8,6 +8,8 @@
 cmake_minimum_required( VERSION 3.5 )
 project( BoostChrono LANGUAGES CXX)
 
+option( BOOST_CHRONO_INCLUDE_TESTS "Build and run some of the unit tests for boost chrono (not all work with cmake yet)" OFF )
+
 add_library( boost_chrono
     src/chrono.cpp
     src/process_cpu_clocks.cpp
@@ -46,3 +48,9 @@ target_link_libraries( boost_chrono
      PRIVATE
         $<$<STREQUAL:Windows,$<PLATFORM_ID>>:Boost::winapi>
 )
+
+if( BOOST_CHRONO_INCLUDE_TESTS )
+    enable_testing()
+    add_subdirectory( test )
+
+endif()
