@@ -128,168 +128,171 @@ namespace boost
      * @param d to value to insert
      * @return @c os
      */
+	inline namespace io_ops {
+		template <class CharT, class Traits, class Rep, class Period>
+		typename boost::enable_if_c< !duration_put_enabled<Rep>::value, std::basic_ostream<CharT, Traits>& >::type
+			operator<<(std::basic_ostream<CharT, Traits>& os, const duration<Rep, Period>& d)
+		{
+			std::basic_ostringstream<CharT, Traits> ostr;
+			ostr << d.count();
+			duration<int, Period> dd(0);
+			bool failed = false;
+			BOOST_TRY
+			{
+			  std::ios_base::iostate err = std::ios_base::goodbit;
+			  BOOST_TRY
+			  {
+				typename std::basic_ostream<CharT, Traits>::sentry opfx(os);
+				if (bool(opfx))
+				{
+				  if (!std::has_facet<duration_put<CharT> >(os.getloc()))
+				  {
+					if (duration_put<CharT>().put(os, os, os.fill(), dd, ostr.str().c_str()).failed())
+					{
+					  err = std::ios_base::badbit;
+					}
+				  }
+				  else if (std::use_facet<duration_put<CharT> >(os.getloc()).put(os, os, os.fill(), dd, ostr.str().c_str()).failed())
+				  {
+					err = std::ios_base::badbit;
+				  }
+				  os.width(0);
+				}
+			  }
+			  BOOST_CATCH(...)
+			  {
+				bool flag = false;
+				BOOST_TRY
+				{
+				  os.setstate(std::ios_base::failbit);
+				}
+				BOOST_CATCH(std::ios_base::failure)
+				{
+				  flag = true;
+				}
+				BOOST_CATCH_END
+				if (flag) throw;
+			  }
+			  BOOST_CATCH_END
+			  if (err) os.setstate(err);
+			  return os;
+			}
+				BOOST_CATCH(...)
+			{
+				failed = true;
+			}
+			BOOST_CATCH_END
+				if (failed) os.setstate(std::ios_base::failbit | std::ios_base::badbit);
+			return os;
 
-    template <class CharT, class Traits, class Rep, class Period>
-    typename boost::enable_if_c< ! duration_put_enabled<Rep>::value, std::basic_ostream<CharT, Traits>& >::type
-    operator<<(std::basic_ostream<CharT, Traits>& os, const duration<Rep, Period>& d)
-    {
-      std::basic_ostringstream<CharT, Traits> ostr;
-      ostr << d.count();
-      duration<int, Period> dd(0);
-      bool failed = false;
-      BOOST_TRY
-      {
-        std::ios_base::iostate err = std::ios_base::goodbit;
-        BOOST_TRY
-        {
-          typename std::basic_ostream<CharT, Traits>::sentry opfx(os);
-          if (bool(opfx))
-          {
-            if (!std::has_facet<duration_put<CharT> >(os.getloc()))
-            {
-              if (duration_put<CharT> ().put(os, os, os.fill(), dd, ostr.str().c_str()) .failed())
-              {
-                err = std::ios_base::badbit;
-              }
-            }
-            else if (std::use_facet<duration_put<CharT> >(os.getloc()) .put(os, os, os.fill(), dd, ostr.str().c_str()) .failed())
-            {
-              err = std::ios_base::badbit;
-            }
-            os.width(0);
-          }
-        }
-        BOOST_CATCH(...)
-        {
-          bool flag = false;
-          BOOST_TRY
-          {
-            os.setstate(std::ios_base::failbit);
-          }
-          BOOST_CATCH (std::ios_base::failure )
-          {
-            flag = true;
-          }
-          BOOST_CATCH_END
-          if (flag) throw;
-        }
-        BOOST_CATCH_END
-        if (err) os.setstate(err);
-        return os;
-      }
-      BOOST_CATCH(...)
-      {
-        failed = true;
-      }
-      BOOST_CATCH_END
-      if (failed) os.setstate(std::ios_base::failbit | std::ios_base::badbit);
-      return os;
+		}
 
-    }
+		template <class CharT, class Traits, class Rep, class Period>
+		typename boost::enable_if_c< duration_put_enabled<Rep>::value, std::basic_ostream<CharT, Traits>& >::type
+			operator<<(std::basic_ostream<CharT, Traits>& os, const duration<Rep, Period>& d)
+		{
+			bool failed = false;
+			BOOST_TRY
+			{
+			  std::ios_base::iostate err = std::ios_base::goodbit;
+			  BOOST_TRY
+			  {
+				typename std::basic_ostream<CharT, Traits>::sentry opfx(os);
+				if (bool(opfx))
+				{
+				  if (!std::has_facet<duration_put<CharT> >(os.getloc()))
+				  {
+					if (duration_put<CharT>().put(os, os, os.fill(), d).failed())
+					{
+					  err = std::ios_base::badbit;
+					}
+				  }
+				  else if (std::use_facet<duration_put<CharT> >(os.getloc()).put(os, os, os.fill(), d).failed())
+				  {
+					err = std::ios_base::badbit;
+				  }
+				  os.width(0);
+				}
+			  }
+			  BOOST_CATCH(...)
+			  {
+				bool flag = false;
+				BOOST_TRY
+				{
+				  os.setstate(std::ios_base::failbit);
+				}
+				BOOST_CATCH(std::ios_base::failure)
+				{
+				  flag = true;
+				}
+				BOOST_CATCH_END
+				if (flag) throw;
+			  }
+			  BOOST_CATCH_END
+			  if (err) os.setstate(err);
+			  return os;
+			}
+				BOOST_CATCH(...)
+			{
+				failed = true;
+			}
+			BOOST_CATCH_END
+				if (failed) os.setstate(std::ios_base::failbit | std::ios_base::badbit);
+			return os;
+		}
 
-    template <class CharT, class Traits, class Rep, class Period>
-    typename boost::enable_if_c< duration_put_enabled<Rep>::value, std::basic_ostream<CharT, Traits>& >::type
-    operator<<(std::basic_ostream<CharT, Traits>& os, const duration<Rep, Period>& d)
-    {
-      bool failed = false;
-      BOOST_TRY
-      {
-        std::ios_base::iostate err = std::ios_base::goodbit;
-        BOOST_TRY
-        {
-          typename std::basic_ostream<CharT, Traits>::sentry opfx(os);
-          if (bool(opfx))
-          {
-            if (!std::has_facet<duration_put<CharT> >(os.getloc()))
-            {
-              if (duration_put<CharT> ().put(os, os, os.fill(), d) .failed())
-              {
-                err = std::ios_base::badbit;
-              }
-            }
-            else if (std::use_facet<duration_put<CharT> >(os.getloc()) .put(os, os, os.fill(), d) .failed())
-            {
-              err = std::ios_base::badbit;
-            }
-            os.width(0);
-          }
-        }
-        BOOST_CATCH(...)
-        {
-          bool flag = false;
-          BOOST_TRY
-          {
-            os.setstate(std::ios_base::failbit);
-          }
-          BOOST_CATCH (std::ios_base::failure )
-          {
-            flag = true;
-          }
-          BOOST_CATCH_END
-          if (flag) throw;
-        }
-        BOOST_CATCH_END
-        if (err) os.setstate(err);
-        return os;
-      }
-      BOOST_CATCH(...)
-      {
-        failed = true;
-      }
-      BOOST_CATCH_END
-      if (failed) os.setstate(std::ios_base::failbit | std::ios_base::badbit);
-      return os;
-    }
+		/**
+		 *
+		 * @param is the input stream
+		 * @param d the duration
+		 * @return @c is
+		 */
+		template <class CharT, class Traits, class Rep, class Period>
+		std::basic_istream<CharT, Traits>&
+			operator>>(std::basic_istream<CharT, Traits>& is, duration<Rep, Period>& d)
+		{
+			std::ios_base::iostate err = std::ios_base::goodbit;
 
-    /**
-     *
-     * @param is the input stream
-     * @param d the duration
-     * @return @c is
-     */
-    template <class CharT, class Traits, class Rep, class Period>
-    std::basic_istream<CharT, Traits>&
-    operator>>(std::basic_istream<CharT, Traits>& is, duration<Rep, Period>& d)
-    {
-      std::ios_base::iostate err = std::ios_base::goodbit;
-
-      BOOST_TRY
-      {
-        typename std::basic_istream<CharT, Traits>::sentry ipfx(is);
-        if (bool(ipfx))
-        {
-          if (!std::has_facet<duration_get<CharT> >(is.getloc()))
-          {
-            duration_get<CharT> ().get(is, std::istreambuf_iterator<CharT, Traits>(), is, err, d);
-          }
-          else
-          {
-            std::use_facet<duration_get<CharT> >(is.getloc()) .get(is, std::istreambuf_iterator<CharT, Traits>(), is,
-                err, d);
-          }
-        }
-      }
-      BOOST_CATCH (...)
-      {
-        bool flag = false;
-        BOOST_TRY
-        {
-          is.setstate(std::ios_base::failbit);
-        }
-        BOOST_CATCH (std::ios_base::failure )
-        {
-          flag = true;
-        }
-        BOOST_CATCH_END
-        if (flag) { BOOST_RETHROW }
-      }
-      BOOST_CATCH_END
-      if (err) is.setstate(err);
-      return is;
-    }
+			BOOST_TRY
+			{
+			  typename std::basic_istream<CharT, Traits>::sentry ipfx(is);
+			  if (bool(ipfx))
+			  {
+				if (!std::has_facet<duration_get<CharT> >(is.getloc()))
+				{
+				  duration_get<CharT>().get(is, std::istreambuf_iterator<CharT, Traits>(), is, err, d);
+				}
+				else
+				{
+				  std::use_facet<duration_get<CharT> >(is.getloc()).get(is, std::istreambuf_iterator<CharT, Traits>(), is,
+					  err, d);
+				}
+			  }
+			}
+				BOOST_CATCH(...)
+			{
+				bool flag = false;
+				BOOST_TRY
+				{
+				  is.setstate(std::ios_base::failbit);
+				}
+					BOOST_CATCH(std::ios_base::failure)
+				{
+					flag = true;
+				}
+				BOOST_CATCH_END
+					if (flag) { BOOST_RETHROW }
+			}
+			BOOST_CATCH_END
+				if (err) is.setstate(err);
+			return is;
+		}
+	}
 
   } // chrono
 
 }
+
+using namespace boost::chrono::io_ops;
 
 #endif  // header

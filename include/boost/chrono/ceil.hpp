@@ -17,18 +17,19 @@ namespace boost
 {
   namespace chrono
   {
+	  using std::chrono::ceil;
 
     /**
      * rounds up
      */
-    template <class To, class Rep, class Period>
-    To ceil(const duration<Rep, Period>& d)
-    {
-        To t = duration_cast<To>(d);
-        if (t < d)
-            ++t;
-        return t;
-    }
+    //template <class To, class Rep, class Period>
+    //To ceil(const duration<Rep, Period>& d)
+    //{
+    //    To t = duration_cast<To>(d);
+    //    if (t < d)
+    //        ++t;
+    //    return t;
+    //}
 
   } // namespace chrono
 } // namespace boost

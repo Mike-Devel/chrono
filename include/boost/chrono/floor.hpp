@@ -17,17 +17,17 @@ namespace boost
 {
   namespace chrono
   {
-
+	  using std::chrono::floor;
     /**
      * rounds down
      */
-    template <class To, class Rep, class Period>
-    To floor(const duration<Rep, Period>& d)
-    {
-      To t = duration_cast<To>(d);
-      if (t>d) --t;
-      return t;
-    }
+    //template <class To, class Rep, class Period>
+    //To floor(const duration<Rep, Period>& d)
+    //{
+    //  To t = std::chrono::duration_cast<To>(d);
+    //  if (t>d) --t;
+    //  return t;
+    //}
 
 
   } // namespace chrono

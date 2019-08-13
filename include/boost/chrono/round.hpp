@@ -19,11 +19,11 @@ namespace boost
 {
   namespace chrono
   {
-
+	  using std::chrono::round;
     /**
      * rounds to nearest, to even on tie
      */
-    template <class To, class Rep, class Period>
+ /*   template <class To, class Rep, class Period>
     To round(const duration<Rep, Period>& d)
     {
         typedef typename common_type<To, duration<Rep, Period> >::type  result_type;
@@ -51,7 +51,7 @@ namespace boost
         else if (diff0 < diff1)
             return t0;
         return t1;
-    }
+    }*/
 
   } // namespace chrono
 } // namespace boost

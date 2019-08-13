@@ -41,8 +41,8 @@ project
         <toolset>clang:<cxxflags>-pedantic
         <toolset>clang:<cxxflags>-Wno-long-long
         <toolset>clang:<cxxflags>-Wno-variadic-macros
-        <toolset>gcc-4.5.0,<target-os>windows:<cxxflags>-Wno-missing-field-initializers 
-        <toolset>gcc-4.5.0,<target-os>windows:<cxxflags>-fdiagnostics-show-option 
+        <toolset>gcc-4.5.0,<target-os>windows:<cxxflags>-Wno-missing-field-initializers
+        <toolset>gcc-4.5.0,<target-os>windows:<cxxflags>-fdiagnostics-show-option
         <toolset>msvc:<cxxflags>/wd4127
         <toolset>msvc:<cxxflags>/wd4512
 # Note: Some of the remarks from the Intel compiler are disabled
@@ -373,7 +373,7 @@ rule chrono-compile2 ( sources : name )
         :
         [ chrono-compile2 traits/common_type_duration_pass.cpp : traits_common_type_duration_p ]
         [ chrono-compile2 traits/common_type_time_point_pass.cpp : traits_common_type_time_point_p ]
-        [ chrono-compile2 traits/treat_as_floating_point_pass.cpp : traits_treat_as_floating_point_p  ]
+  #      [ chrono-compile2 traits/treat_as_floating_point_pass.cpp : traits_treat_as_floating_point_p  ]
         [ chrono-run-header2 traits/duration_values_pass.cpp : traits_duration_values_p ]
         ;
 
@@ -409,7 +409,7 @@ rule chrono-compile2 ( sources : name )
         [ chrono-compile2 time_point/default_duration_pass.cpp : time_point_default_duration_p ]
         [ compile-fail time_point/not_duration_fail.cpp : : time_point_not_duration_f   ]
         [ chrono-run-header2 time_point/arithmetic_pass.cpp  : time_point_arithmetic_p ]
-        [ chrono-run-header2 time_point/arithmetic_ext_pass.cpp  : time_point_arithmetic_ext_p ]
+      #  [ chrono-run-header2 time_point/arithmetic_ext_pass.cpp  : time_point_arithmetic_ext_p ]
         [ chrono-run-header2 time_point/time_point_cast_pass.cpp  : time_point_time_point_cast_p ]
         [ compile-fail time_point/time_point_cast_int_fail.cpp : : time_point_time_point_cast_int_f   ]
         [ chrono-run-header2 time_point/comparisons_pass.cpp  : time_point_comparisons_p ]

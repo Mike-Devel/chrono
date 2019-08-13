@@ -14,7 +14,7 @@
 #include <boost/chrono/chrono.hpp>
 #include <boost/type_traits.hpp>
 
-#if !defined(BOOST_NO_CXX11_STATIC_ASSERT) 
+#if !defined(BOOST_NO_CXX11_STATIC_ASSERT)
 #define NOTHING ""
 #endif
 
@@ -26,7 +26,7 @@ test()
     typedef boost::chrono::time_point<C, D1> T1;
     typedef boost::chrono::time_point<C, D2> T2;
     typedef boost::chrono::time_point<C, De> Te;
-    typedef typename boost::common_type<T1, T2>::type Tc;
+    typedef typename std::common_type<T1, T2>::type Tc;
     BOOST_CHRONO_STATIC_ASSERT((boost::is_same<Tc, Te>::value), NOTHING, (T1, T2, Tc, Te));
 }
 
