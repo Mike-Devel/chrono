@@ -402,6 +402,7 @@ rule chrono-compile2 ( sources : name )
         [ compile-fail duration/nonmember/times_rep2_rhs_fail.cpp ]
         [ chrono-run-header duration/duration_values_pass.cpp ]
         [ chrono-run-header duration/rounding_pass.cpp  ]
+        [ chrono-run std_interop_pass.cpp  ]
         ;
 
     test-suite "time_point"

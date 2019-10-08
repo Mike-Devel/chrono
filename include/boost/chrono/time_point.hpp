@@ -32,6 +32,10 @@ time2_demo contained this comment:
 
 #include <boost/chrono/duration.hpp>
 
+#if !defined(BOOST_NO_CXX11_HDR_CHRONO)
+#include <chrono>
+#endif
+
 #ifndef BOOST_CHRONO_HEADER_ONLY
 // this must occur after all of the includes and before any code appears:
 #include <boost/config/abi_prefix.hpp> // must be the last #include
@@ -367,6 +371,26 @@ namespace chrono {
         return time_point<Clock, ToDuration>(
                 duration_cast<ToDuration>(t.time_since_epoch()));
     }
+
+//----------------------------------------------------------------------------//
+//      Interoperability with std::chrono                                     //
+//----------------------------------------------------------------------------//
+
+#if !defined(BOOST_NO_CXX11_HDR_CHRONO)
+    template<class Clock, class Duration>
+    boost::chrono::time_point<Clock, Duration>
+    to_boost_time_point(const std::chrono::time_point<Clock, Duration>& std_tp)
+    {
+        return boost::chrono::time_point<Clock, Duration>(std_tp.time_since_epoch());
+    }
+
+    template<class Clock, class Duration>
+    std::chrono::time_point<Clock, Duration>
+    to_std_time_point(const boost::chrono::time_point<Clock, Duration>& std_tp)
+    {
+        return std::chrono::time_point<Clock, Duration>(std_tp.time_since_epoch());
+    }
+#endif
 
 } // namespace chrono
 } // namespace boost

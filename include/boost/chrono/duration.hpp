@@ -3,6 +3,7 @@
 //  Copyright 2008 Howard Hinnant
 //  Copyright 2008 Beman Dawes
 //  Copyright 2009-2011 Vicente J. Botet Escriba
+//  Copyright 2019 Mike Dev <mike.dev@gmx.de>
 
 //  Distributed under the Boost Software License, Version 1.0.
 //  See http://www.boost.org/LICENSE_1_0.txt
@@ -36,6 +37,9 @@ time2_demo contained this comment:
 #include <climits>
 #include <limits>
 
+#if !defined(BOOST_NO_CXX11_HDR_CHRONO)
+#include <chrono>
+#endif
 
 #include <boost/mpl/logical.hpp>
 #include <boost/ratio/ratio.hpp>
@@ -786,6 +790,26 @@ namespace detail
         return boost::chrono::detail::duration_cast<
           duration<Rep, Period>, ToDuration>()(fd);
     }
+
+//----------------------------------------------------------------------------//
+//      Interoperability with std::chrono                                     //
+//----------------------------------------------------------------------------//
+
+#if !defined(BOOST_NO_CXX11_HDR_CHRONO)
+	template<class Rep, class Period>
+	constexpr boost::chrono::duration<Rep, boost::ratio<Period::num, Period::den>>
+	to_boost_duration(const std::chrono::duration<Rep, Period>& std_dur)
+	{
+		return boost::chrono::duration<Rep, boost::ratio<Period::num, Period::den>>(std_dur.count());
+	}
+
+	template<class Rep, class Period>
+	constexpr std::chrono::duration<Rep, std::ratio<Period::num, Period::den>>
+	to_std_duration(const boost::chrono::duration<Rep, Period>& boost_dur)
+	{
+		return std::chrono::duration<Rep, std::ratio<Period::num, Period::den>>(boost_dur.count());
+	}
+#endif
 
 } // namespace chrono
 } // namespace boost
